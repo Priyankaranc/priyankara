@@ -1,0 +1,39 @@
+selects max id from a table
+
+SELECT MAX(CAST(Id AS bigint)) FROM [105.1.200.38].[Bartender].[dbo].[CartonLabelHead]
+
+table variables define
+
+DECLARE @CartonDetails TABLE
+       (
+         LabelType VARCHAR(100),
+         IDValue VARCHAR(100),
+         CartonKey VARCHAR(250),
+         IsSuccess INT
+       )
+
+tsql if statements
+
+IF @ISNewLineRemainder = '1'
+BEGIN
+INSERT INTO @CartonDetails( LabelType ,IDValue, CartonKey) VALUES ('CartonLabelMixed',  @TableIdForGrouping , @cartonForGrouping)
+END
+
+insert to table with conditions checking values
+
+CASE WHEN h.SupplyTypeNew = 'S03' THEN c.CartonId ELSE l.UPCNew END
+CASE WHEN l.UnitPerCasePackNew > 0 THEN pl.Quantity/ l.UnitPerCasePackNew ELSE 0 END
+
+
+check for null or empty
+
+isnull(UCCTemplate, '') = ''
+
+SELECT MAX(CAST(IDValue as bigint)) as 'CartonLabelId', LabelType as 'CartonLabelName', MAX(CAST(IsSuccess as INT)) as 'IsSuccess', MAX(CASE WHEN isnull(UCCTemplate, '') = '' THEN 'Content|GENERIC.btw' ELSE REPLACE(substring(UCCTemplate, LEN(UCCTemplate) - Charindex('\',Reverse(UCCTemplate))-2, LEN(UCCTemplate)), '\', '|')  END) as 'UCCTemplate'
+        from  @CartonDetails
+        GROUP BY LabelType, IDValue
+
+
+
+
+
