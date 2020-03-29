@@ -1,0 +1,53 @@
+Find items from a list which exist in another list 
+ListA.Where(a => ListX.Any(x => x.b == a.b))
+
+
+fileList.Where(item => filterList.Contains(item))
+
+
+ 
+ Ordering
+  var SortedList = brandWiseFilteredRecords.OrderBy(o => o.NewBrand).ToList();
+ 
+Convert dynamic object to a list
+List<dynamic> list = Enumerable.ToList<dynamic>(returnObject.Data);
+ 
+ 
+Groupings
+ 
+var groupedOrderList = SortedList.GroupBy(u => u.NewBrand).Select(grp => grp.ToList()).ToList();
+
+Two lists comparitions
+
+var data21 = objCustomer.OrderLine.Where(i => i.ColumnName == "WareHousfe").Select(j => j.NewValue);
+
+
+
+List contains a value       public IList<OrderLineRequestDTO> GetOrderLinesById(List<long> lineIds, string m3Partner)        {            if (lineIds.Equals(null))            {                return null;            }             var cust = this.repository.GetAll<OrderLine>().Where(x => lineIds.Contains(x.Id)).ToList();             var m3Integration = new M3Integration();             var OrderLineRequestDTOList = m3Integration.ConvertToM3LineDTO(cust);              return OrderLineRequestDTOList;         }
+
+
+         var existingSelectedInvoices = repo.GetAllQuery<SelectedInvoice>().Where<SelectedInvoice>(o => o.PaymentEntryId == paymentRecord.Id && o.RecordStatusId == (int)RecordStatusEnum.Active).ToList();
+                    var invoicesTORemove = existingSelectedInvoices.Where(n => !arCheckDTO.InvoicesData.Select(n1 => n1.cino).Contains(n.InvoiceNo)).ToList();
+
+
+// List comparing ds way ===========================================================================================
+
+  [LogMethod]
+        public CreateInvoiceResponseDTO SaveReversalChanges(ARCheckDTO arCheckDTO)
+        {
+            StringBuilder message = new StringBuilder();
+            int statusId = 1;
+            CreateInvoiceResponseDTO saveARCheckResponse = new CreateInvoiceResponseDTO();
+            BaseRepository repository = new BaseRepository();
+            var existingCommonAdjRecords = repository.GetAllQuery<CommonAdjustment>().Where<CommonAdjustment>(o => o.PaymentEntryId == arCheckDTO.PaymentEntry.Id && o.RecordStatusId == (int)RecordStatusEnum.Active).ToList();
+         //   var reasonChangedList = arCheckDTO.CommonAdjustments.Where(a => !existingCommonAdjRecords.Any( x => x.Reason == a.Reason));
+            var reasonChangedList = (from t1 in existingCommonAdjRecords
+                        join t2 in arCheckDTO.CommonAdjustments on t1.Id equals t2.Id
+                        where t1.Reason != t2.Reason
+                        select t2).ToList();
+
+            // var responsibleChangedList = arCheckDTO.CommonAdjustments.Where(a => !existingCommonAdjRecords.Any(x => x.Responsible == a.Responsible));
+            var responsibleChangedList = (from t1 in existingCommonAdjRecords
+                                     join t2 inarCheckDTO.CommonAdjustmentson t1.Id equals t2.Id
+                                     where t1.Responsible != t2.Responsible
+                                     select t2).ToList();
