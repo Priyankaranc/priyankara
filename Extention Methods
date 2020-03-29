@@ -1,0 +1,9 @@
+DateTimeExtensions
+
+DateTime firstDayOfMonth = DateTime.Now.First();
+DateTime lastdayOfMonth = DateTime.Now.Last();
+DateTime lastFridayInMonth = DateTime.Now.Last(DayOfWeek.Friday);
+DateTime nextFriday = DateTime.Now.Next(DayOfWeek.Friday);
+DateTime lunchTime = DateTime.Now.SetTime(11, 30);
+DateTime noonOnFriday = DateTime.Now.Next(DayOfWeek.Friday).Noon();
+DateTime secondMondayOfMonth = DateTime.Now.First(DayOfWeek.Monday).Next(DayOfWeek.Monday).Midnight();
